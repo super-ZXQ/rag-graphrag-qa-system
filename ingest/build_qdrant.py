@@ -10,9 +10,18 @@ import sys
 import time
 from pathlib import Path
 
+import numpy as np
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import (
-    CHUNKS_FILE, EMBED_MODEL, PROJECT_ROOT, QDRANT_COLLECTION, QDRANT_URL, VECTOR_SIZE,
+    CHUNKS_FILE,
+    EMBED_BATCH_SIZE,
+    EMBED_MODEL,
+    PROJECT_ROOT,
+    QDRANT_COLLECTION,
+    QDRANT_UPSERT_BATCH,
+    QDRANT_URL,
+    VECTOR_SIZE,
 )
 
 sys.stdout.reconfigure(encoding="utf-8")
@@ -42,18 +51,16 @@ def main():
     emb = OllamaEmbeddings(model=EMBED_MODEL)
     texts = [c["text"] for c in chunks]
     t0 = time.time()
-    BATCH = 16  # GPU 批大点吞吐高
 
     # 缓存：避免重跑要重新嵌入（每次 2~3 分钟）
-    import numpy as np
     cache = PROJECT_ROOT / "data" / "vectors.npy"
     if cache.exists() and np.load(cache, mmap_mode="r").shape == (len(texts), VECTOR_SIZE):
         all_vecs = np.load(cache).tolist()
         print(f"[build_qdrant] loaded {len(all_vecs)} vectors from cache ({cache})")
     else:
         all_vecs = []
-        for i in range(0, len(texts), BATCH):
-            batch = texts[i:i+BATCH]
+        for i in range(0, len(texts), EMBED_BATCH_SIZE):
+            batch = texts[i:i + EMBED_BATCH_SIZE]
             for attempt in range(3):
                 try:
                     vecs = emb.embed_documents(batch)
@@ -61,7 +68,7 @@ def main():
                 except Exception as e:
                     if attempt == 2:
                         raise
-                    print(f"  [retry {attempt+1}/3] batch {i//BATCH}: {e}")
+                    print(f"  [retry {attempt+1}/3] batch {i//EMBED_BATCH_SIZE}: {e}")
                     time.sleep(2 ** attempt)
             all_vecs.extend(vecs)
             done = len(all_vecs)
@@ -76,10 +83,9 @@ def main():
     # upsert（分批，避免单次请求过大）
     # Qdrant 只接受 uint64 或 UUID 作 point id，不能用字符串
     # 用 chunk 的全局下标做 id，并把可读的 chunk_id 存在 payload 里
-    UPSERT_BATCH = 100
-    for i in range(0, len(chunks), UPSERT_BATCH):
-        batch_chunks = chunks[i:i+UPSERT_BATCH]
-        batch_vecs = all_vecs[i:i+UPSERT_BATCH]
+    for i in range(0, len(chunks), QDRANT_UPSERT_BATCH):
+        batch_chunks = chunks[i:i + QDRANT_UPSERT_BATCH]
+        batch_vecs = all_vecs[i:i + QDRANT_UPSERT_BATCH]
         points = [
             PointStruct(
                 id=i + j,  # uint64

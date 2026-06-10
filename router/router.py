@@ -21,7 +21,13 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 
-from config import EMBED_MODEL, LLM_MODEL, LLM_TEMPERATURE, OLLAMA_BASE_URL
+from config import (
+    EMBED_MODEL,
+    LLM_MODEL,
+    LLM_TEMPERATURE,
+    OLLAMA_BASE_URL,
+    ROUTER_MARGIN_THRESHOLD,
+)
 
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -222,50 +228,54 @@ def route_decision(decision: dict) -> dict:
 
 
 # ============== 6. 三级 fallback 主入口 ==============
+def _keyword_match(question: str) -> str | None:
+    """关键词路由 + 实体校验；命中则返回 destination，否则返回 None。
+
+    - 命中"引用路径/是否引用/引用了哪些"等关键词 → 初步判为 graph_rag
+    - 若 graph_rag 候选问题中未识别到任何论文实体 → 视为误匹配，降级走下一级
+    """
+    kw_dest = keyword_route(question)
+    if not kw_dest:
+        return None
+    if kw_dest == "graph_rag":
+        from graphrag.pipeline import detect_arxiv_ids
+        if not detect_arxiv_ids(question):
+            return None  # 误匹配 → 交给下一级路由
+    return kw_dest
+
+
+def _build_keyword_decision(question: str, kw_dest: str) -> dict:
+    """把命中信息打包成下游 route_decision() 需要的决策 dict"""
+    matched = [p for p in GRAPH_KEYWORDS if re.search(p, question, re.IGNORECASE)]
+    return {
+        "destination": kw_dest,
+        "input": question,
+        "reason": f"关键词命中: {matched[0] if matched else '未知模式'}",
+    }
+
+
 def smart_route(question: str) -> dict:
     """
     智能路由主入口：关键词 → 语义 → LLM
     返回 dict，包含 answer / sources / route / router_decision / router_method 等
     """
-    method_chain = []  # 记录实际命中的路由方法链
+    method_chain: list[str] = []  # 记录实际命中的路由方法链
 
-    # === 1) 关键词路由（命中即停） ===
-    kw_dest = keyword_route(question)
+    # === 1) 关键词路由（命中即停；误匹配则降级到下一级）===
+    kw_dest = _keyword_match(question)
     if kw_dest:
-        # 校验：图查询必须提到至少一篇论文实体，否则可能是误匹配
-        if kw_dest == "graph_rag":
-            from graphrag.pipeline import detect_arxiv_ids
-            if not detect_arxiv_ids(question):
-                # 关键词命中但无论文实体，降级到语义路由
-                method_chain.append("keyword-false-positive")
-            else:
-                matched = [p for p in GRAPH_KEYWORDS if re.search(p, question, re.IGNORECASE)]
-                decision = {
-                    "destination": kw_dest,
-                    "input": question,
-                    "reason": f"关键词命中: {matched[0] if matched else '未知模式'}",
-                }
-                result = route_decision(decision)
-                result["router_method"] = "keyword"
-                return result
-        else:
-            matched = [p for p in GRAPH_KEYWORDS if re.search(p, question, re.IGNORECASE)]
-            decision = {
-                "destination": kw_dest,
-                "input": question,
-                "reason": f"关键词命中: {matched[0] if matched else '未知模式'}",
-            }
-            result = route_decision(decision)
-            result["router_method"] = "keyword"
-            return result
+        result = route_decision(_build_keyword_decision(question, kw_dest))
+        result["router_method"] = "keyword"
+        return result
+    method_chain.append("keyword-miss")
 
     # === 2) 语义路由 ===
     try:
         sem_dest, sem_scores = semantic_route(question)
-        # 置信度阈值：差值 < 0.05 时判为不确定，让 LLM 兜底
+        # 置信度阈值：差值 < 阈值时判为不确定，让 LLM 兜底
         scores_sorted = sorted(sem_scores.values(), reverse=True)
         margin = scores_sorted[0] - scores_sorted[1] if len(scores_sorted) > 1 else 1.0
-        if margin >= 0.03:
+        if margin >= ROUTER_MARGIN_THRESHOLD:
             decision = {
                 "destination": sem_dest,
                 "input": question,
@@ -280,7 +290,7 @@ def smart_route(question: str) -> dict:
     except Exception as e:
         method_chain.append(f"semantic-failed({e})")
 
-    # === 3) LLM 路由 ===
+    # === 3) LLM 路由（兜底） ===
     decision = llm_route(question)
     result = route_decision(decision)
     result["router_method"] = "llm" if not method_chain else "+".join(method_chain) + "+llm"
@@ -317,9 +327,9 @@ if __name__ == "__main__":
         actual = result.get("route", "?")
         method = result.get("router_method", "?")
         reason = result.get("router_decision", {}).get("reason", "")
-        match = "✓" if actual == "RAG" and expected == "vector_rag" else \
-                "✓" if actual == "GraphRAG" and expected == "graph_rag" else "✗"
-        if "✓" in match:
+        expected_label = "RAG" if expected == "vector_rag" else "GraphRAG"
+        match = "✓" if actual == expected_label else "✗"
+        if match == "✓":
             correct += 1
         block.append(f"[route] {actual}  [method] {method}  [{match}]")
         block.append(f"[reason] {reason}")

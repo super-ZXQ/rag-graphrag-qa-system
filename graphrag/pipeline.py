@@ -13,11 +13,13 @@ GraphRAG 问答模块（步骤 7）— 基于 Neo4j 引用图
 """
 import re
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import (
+    LLM_MAX_RETRIES,
     LLM_MODEL,
     LLM_TEMPERATURE,
     NEO4J_DATABASE,
@@ -125,8 +127,7 @@ def detect_arxiv_ids(question: str) -> list[str]:
     seen = set()
     out = []
     for m in ALIAS_PATTERN.finditer(question):
-        alias = m.group(1)
-        aid = PAPER_ALIASES[alias.lower()]
+        aid = PAPER_ALIASES[m.group(1)]  # regex 已 IGNORECASE，key 保持小写
         if aid not in seen:
             seen.add(aid)
             out.append(aid)
@@ -191,9 +192,8 @@ def template_query(question: str) -> tuple[str, list[dict], str] | None:
         yes = ids[1] in cited_ids
         return cypher, [{"cited": yes, "from": ids[0], "to": ids[1]}], "boolean"
 
-    # --- 出边：X 引用了哪些 ---
-    if ids and ("引用了哪些" in q or "引用了" in q or "引用" in q):
-        # 单论文 + 引用关键词 → 出边
+    # --- 出边：X 引用了哪些（"引用" 一词覆盖所有引用相关查询）---
+    if ids and "引用" in q:
         cypher = cypher_outgoing(ids[0])
         rows = _run_cypher(cypher)
         return cypher, rows, "outgoing"
@@ -204,6 +204,7 @@ def template_query(question: str) -> tuple[str, list[dict], str] | None:
         rows = _run_cypher(cypher)
         return cypher, rows, "incoming"
 
+    # 关键词模板均未命中 → 交给 LLM 生成 Cypher
     return None
 
 
@@ -276,9 +277,8 @@ Cypher 查询：{cypher}
 answer_chain = ANSWER_PROMPT | llm | StrOutputParser()
 
 
-def _llm_invoke_with_retry(chain, inputs: dict, max_retries: int = 3) -> str:
+def _llm_invoke_with_retry(chain, inputs: dict, max_retries: int = LLM_MAX_RETRIES) -> str:
     """带重试的 LLM 调用，防止 Ollama 偶尔断连"""
-    import time
     for attempt in range(max_retries):
         try:
             return chain.invoke(inputs)

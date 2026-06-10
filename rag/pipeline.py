@@ -13,12 +13,14 @@ RAG 问答模块（步骤 6） — 基于 LangChain 1.x LCEL
   - RETRIEVER_K = 3
 """
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import (
     EMBED_MODEL,
+    LLM_MAX_RETRIES,
     LLM_MODEL,
     LLM_TEMPERATURE,
     OLLAMA_BASE_URL,
@@ -89,13 +91,12 @@ llm = ChatOllama(
 # ============== 2. 文档格式化 ==============
 # payload 里有 arxiv_id / chunk_id / filename / text
 # short_name / title 走 PAPERS 字典查表，方便界面展示
-ARXIV_TO_META = PAPERS  # 复用
 
 
 def _doc_label(doc: Document) -> str:
     """把一篇检索结果拼成 '作者.年份 (短名)' 这种人类可读标签"""
     aid = doc.metadata.get("arxiv_id", "?")
-    meta = ARXIV_TO_META.get(aid, {})
+    meta = PAPERS.get(aid, {})
     return meta.get("short_name", aid)
 
 
@@ -136,9 +137,8 @@ rag_chain = (
 )
 
 
-def _llm_invoke_with_retry(chain, inputs, max_retries: int = 3):
+def _llm_invoke_with_retry(chain, inputs, max_retries: int = LLM_MAX_RETRIES):
     """带重试的 LLM 调用，防止 Ollama 偶尔断连"""
-    import time
     for attempt in range(max_retries):
         try:
             return chain.invoke(inputs)
@@ -174,7 +174,7 @@ def rag_query(question: str) -> dict:
     sources = []
     for i, d in enumerate(docs, 1):
         aid = d.metadata.get("arxiv_id", "?")
-        meta = ARXIV_TO_META.get(aid, {})
+        meta = PAPERS.get(aid, {})
         sources.append({
             "n": i,
             "arxiv_id": aid,

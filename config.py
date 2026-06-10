@@ -47,7 +47,17 @@ CHUNK_OVERLAP = 100
 # ============ 检索参数 ============
 RETRIEVER_K = 3  # Top-K
 
+# ============ 路由参数 ============
+# 语义路由：Top1 与 Top2 相似度差值阈值，低于此值判为不确定 → 走 LLM
+ROUTER_MARGIN_THRESHOLD = 0.03
+# 路由 LLM 与问答 LLM 共用 qwen3:4b；如想区分可在调 router 时单独传
+
+# ============ 嵌入 / 构建批量 ============
+EMBED_BATCH_SIZE = 16        # build_qdrant.py 单批嵌入条数
+QDRANT_UPSERT_BATCH = 100    # build_qdrant.py 单批 upsert 条数
+
 # ============ LLM 容错 ============
+LLM_MAX_RETRIES = 3
 # LLM 生成的 Cypher 常带 ```cypher ``` 包裹，需要清洗
 CYPHER_CLEAN_REGEX = r"```[a-zA-Z]*\n?|```"
 

@@ -19,7 +19,7 @@ ARXIV_RE = re.compile(r"(\d{4}\.\d{4,5})")  # 抓 arxiv 编号
 
 
 def clean_text(text: str) -> str:
-    r"""pypdf 偶尔会吐出 UTF-16 代理字符（形式如 \uDCXX），
+    """pypdf 偶尔会吐出 UTF-16 代理字符（形式如 \\uDCXX），
     Python utf-8 编码器拒绝它们。先用 surrogatepass 编码再用 replace 解码，
     把孤立代理换成 U+FFFD。"""
     return text.encode("utf-8", errors="surrogatepass").decode("utf-8", errors="replace")

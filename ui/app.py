@@ -6,7 +6,9 @@ Streamlit UI — 基于 RAG + GraphRAG 的学术论文问答系统
 - 6 道测试题快捷按钮 + 自由问答
 - 完整显示：答案 / 引用 / 检索/查询细节
 
-启动：cd d:\小组作业\rag_qa_system && $env:NEO4J_PASSWORD="neo4j12345"; streamlit run ui/app.py
+启动（Windows PowerShell，先确保 Docker 中的 Qdrant/Neo4j 在运行）：
+    $env:NEO4J_PASSWORD = "<你的 Neo4j 密码>"
+    streamlit run ui/app.py
 访问：http://localhost:8501
 """
 import sys
