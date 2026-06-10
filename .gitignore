@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.so
+*.egg
+*.egg-info/
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 论文原文与缓存（版权保护 + 大文件）
+data/
+papers/
+
+# 截图（已嵌入到设计报告）
+screenshots/
+
+# 日志
+*.log
+*.out
+logs/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 环境变量
+.env
+.env.local
+
+# Neo4j / Qdrant 数据
+neo4j_data/
+qdrant_storage/
