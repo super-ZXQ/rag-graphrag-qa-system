@@ -261,4 +261,3 @@ def test_cancel_and_resume_require_existing_task(monkeypatch, tmp_path):
     client, _ = _isolate(monkeypatch, tmp_path)
     assert client.post("/research-tasks/missing/resume").status_code == 404
     assert client.post("/research-tasks/missing/revise", json={"reviewer_note": "x"}).status_code == 404
-
