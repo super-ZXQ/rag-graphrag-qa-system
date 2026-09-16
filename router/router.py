@@ -19,15 +19,14 @@ import numpy as np
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda
-from langchain_ollama import ChatOllama, OllamaEmbeddings
+from langchain_ollama import OllamaEmbeddings
 
 from config import (
     EMBED_MODEL,
-    LLM_MODEL,
-    LLM_TEMPERATURE,
     OLLAMA_BASE_URL,
     ROUTER_MARGIN_THRESHOLD,
 )
+from llm import get_chat_model
 
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -131,12 +130,6 @@ def semantic_route(question: str) -> tuple[str, dict[str, float]]:
 
 
 # ============== 4. LLM 路由（兜底，最智能但最慢） ==============
-llm_router = ChatOllama(
-    model=LLM_MODEL,
-    base_url=OLLAMA_BASE_URL,
-    temperature=LLM_TEMPERATURE,
-)
-
 ROUTER_PROMPT = ChatPromptTemplate.from_template("""
 你是智能路由助手。根据用户问题，选择最合适的知识库。
 
@@ -149,7 +142,9 @@ ROUTER_PROMPT = ChatPromptTemplate.from_template("""
 {{"destination": "vector_rag 或 graph_rag", "reason": "一句话说明判断依据"}}
 """)
 
-_router_llm_chain = ROUTER_PROMPT | llm_router | StrOutputParser()
+def _router_llm_chain():
+    """延迟创建模型链，便于本地检查和 API 配置错误提示。"""
+    return ROUTER_PROMPT | get_chat_model() | StrOutputParser()
 
 
 def _build_destinations_text() -> str:
@@ -183,7 +178,7 @@ def parse_router_output(text: str) -> dict:
 def llm_route(question: str) -> dict:
     """LLM 路由：返回 {destination, reason, raw, input}"""
     try:
-        raw = _router_llm_chain.invoke({
+        raw = _router_llm_chain().invoke({
             "destinations": _build_destinations_text(),
             "input": question,
         })

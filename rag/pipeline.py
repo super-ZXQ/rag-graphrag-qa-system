@@ -21,8 +21,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import (
     EMBED_MODEL,
     LLM_MAX_RETRIES,
-    LLM_MODEL,
-    LLM_TEMPERATURE,
     OLLAMA_BASE_URL,
     QDRANT_COLLECTION,
     QDRANT_URL,
@@ -33,10 +31,11 @@ from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda, RunnableParallel, RunnablePassthrough
-from langchain_ollama import ChatOllama, OllamaEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from qdrant_client import QdrantClient
 
 from graph.citations import PAPERS
+from llm import get_chat_model
 
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -81,13 +80,6 @@ def qdrant_flat_search(query: str) -> list[Document]:
 # 包成 RunnableLambda 才能进 LCEL 管道（用 `|` 串到下游）
 retriever = RunnableLambda(qdrant_flat_search)
 
-# 生成 LLM
-llm = ChatOllama(
-    model=LLM_MODEL,
-    base_url=OLLAMA_BASE_URL,
-    temperature=LLM_TEMPERATURE,
-)
-
 # ============== 2. 文档格式化 ==============
 # payload 里有 arxiv_id / chunk_id / filename / text
 # short_name / title 走 PAPERS 字典查表，方便界面展示
@@ -126,15 +118,17 @@ RAG_PROMPT = ChatPromptTemplate.from_messages([
 
 # ============== 4. LCEL 链 ==============
 # 同时拿"上下文"和"原问题"喂给 prompt；context 经过 retriever + format_docs 管道
-rag_chain = (
-    RunnableParallel(
-        context=retriever | RunnableLambda(format_docs),
-        question=RunnablePassthrough(),
+def build_rag_chain():
+    """延迟创建生成链，避免导入时要求已配置 API 密钥。"""
+    return (
+        RunnableParallel(
+            context=retriever | RunnableLambda(format_docs),
+            question=RunnablePassthrough(),
+        )
+        | RAG_PROMPT
+        | get_chat_model()
+        | StrOutputParser()
     )
-    | RAG_PROMPT
-    | llm
-    | StrOutputParser()
-)
 
 
 def _llm_invoke_with_retry(chain, inputs, max_retries: int = LLM_MAX_RETRIES):
@@ -166,7 +160,7 @@ def rag_query(question: str) -> dict:
 
     # 2) 直接用 prompt + LLM 生成答案（跳过链内 retriever，带重试）
     answer: str = _llm_invoke_with_retry(
-        RAG_PROMPT | llm | StrOutputParser(),
+        RAG_PROMPT | get_chat_model() | StrOutputParser(),
         {"context": context_str, "question": question},
     )
 

@@ -20,21 +20,18 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import (
     LLM_MAX_RETRIES,
-    LLM_MODEL,
-    LLM_TEMPERATURE,
     NEO4J_DATABASE,
     NEO4J_PASSWORD,
     NEO4J_URI,
     NEO4J_USER,
-    OLLAMA_BASE_URL,
 )
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_ollama import ChatOllama
 from neo4j import GraphDatabase
 
 from graph.citations import PAPERS
+from llm import get_chat_model
 
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -43,10 +40,10 @@ sys.stdout.reconfigure(encoding="utf-8")
 _driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
 
 
-def _run_cypher(cypher: str) -> list[dict]:
+def _run_cypher(cypher: str, parameters: dict | None = None) -> list[dict]:
     """执行 Cypher，返回 list[dict]；出错抛异常"""
     with _driver.session(database=NEO4J_DATABASE) as s:
-        return [dict(r) for r in s.run(cypher)]
+        return [dict(r) for r in s.run(cypher, parameters or {})]
 
 
 # ============== 2. 论文别名 → arxiv_id ==============
@@ -127,7 +124,7 @@ def detect_arxiv_ids(question: str) -> list[str]:
     seen = set()
     out = []
     for m in ALIAS_PATTERN.finditer(question):
-        aid = PAPER_ALIASES[m.group(1)]  # regex 已 IGNORECASE，key 保持小写
+        aid = PAPER_ALIASES[m.group(1).lower()]
         if aid not in seen:
             seen.add(aid)
             out.append(aid)
@@ -137,34 +134,34 @@ def detect_arxiv_ids(question: str) -> list[str]:
 # ============== 3. 预定义 Cypher 模板 ==============
 # 模板覆盖考试 Q4/Q5/Q6；其他问句走 LLM 生成
 
-def cypher_outgoing(arxiv_id: str) -> str:
+def cypher_outgoing() -> str:
     """出边：X 引用了哪些论文"""
     return (
-        f"MATCH (a:Paper {{arxiv_id:'{arxiv_id}'}})-[:CITES]->(b:Paper) "
+        "MATCH (a:Paper {arxiv_id: $arxiv_id})-[:CITES]->(b:Paper) "
         f"RETURN b.arxiv_id AS arxiv_id, b.title AS title, "
         f"b.short_name AS short_name, b.year AS year "
         f"ORDER BY b.year, b.arxiv_id"
     )
 
 
-def cypher_incoming(arxiv_id: str) -> str:
+def cypher_incoming() -> str:
     """入边：哪些论文引用了 X"""
     return (
-        f"MATCH (a:Paper)-[:CITES]->(b:Paper {{arxiv_id:'{arxiv_id}'}}) "
+        "MATCH (a:Paper)-[:CITES]->(b:Paper {arxiv_id: $arxiv_id}) "
         f"RETURN a.arxiv_id AS arxiv_id, a.title AS title, "
         f"a.short_name AS short_name, a.year AS year "
         f"ORDER BY a.year, a.arxiv_id"
     )
 
 
-def cypher_path(src: str, dst: str, directed: bool = False) -> str:
+def cypher_path(directed: bool = False) -> str:
     """路径查询：X → Y"""
     if directed:
         rel = "-[:CITES*1..6]->"
     else:
         rel = "-[:CITES*1..6]-"
     return (
-        f"MATCH p = shortestPath((a:Paper {{arxiv_id:'{src}'}}){rel}(b:Paper {{arxiv_id:'{dst}'}})) "
+        f"MATCH p = shortestPath((a:Paper {{arxiv_id: $src}}){rel}(b:Paper {{arxiv_id: $dst}})) "
         f"RETURN [n IN nodes(p) | n.short_name] AS path, "
         f"length(p) AS hops"
     )
@@ -181,85 +178,34 @@ def template_query(question: str) -> tuple[str, list[dict], str] | None:
 
     # --- 路径查询：必须同时提到 2 篇 ---
     if ("路径" in q or "path" in q.lower() or "经过" in q) and len(ids) >= 2:
-        cypher = cypher_path(ids[0], ids[1], directed=False)
-        rows = _run_cypher(cypher)
+        cypher = cypher_path(directed=False)
+        rows = _run_cypher(cypher, {"src": ids[0], "dst": ids[1]})
         return cypher, rows, "path"
 
     if "是否引用" in q and len(ids) >= 2:
-        cypher = cypher_outgoing(ids[0])  # 看 X 出边里有无 Y
-        rows = _run_cypher(cypher)
+        cypher = cypher_outgoing()  # 看 X 出边里有无 Y
+        rows = _run_cypher(cypher, {"arxiv_id": ids[0]})
         cited_ids = {r["arxiv_id"] for r in rows}
         yes = ids[1] in cited_ids
         return cypher, [{"cited": yes, "from": ids[0], "to": ids[1]}], "boolean"
 
-    # --- 出边：X 引用了哪些（"引用" 一词覆盖所有引用相关查询）---
-    if ids and "引用" in q:
-        cypher = cypher_outgoing(ids[0])
-        rows = _run_cypher(cypher)
-        return cypher, rows, "outgoing"
-
     # --- 入边：哪些引用了 X ---
     if ids and ("被谁引用" in q or "哪些论文引用" in q or "被引用" in q):
-        cypher = cypher_incoming(ids[0])
-        rows = _run_cypher(cypher)
+        cypher = cypher_incoming()
+        rows = _run_cypher(cypher, {"arxiv_id": ids[0]})
         return cypher, rows, "incoming"
+
+    # --- 出边：X 引用了哪些 ---
+    if ids and "引用" in q:
+        cypher = cypher_outgoing()
+        rows = _run_cypher(cypher, {"arxiv_id": ids[0]})
+        return cypher, rows, "outgoing"
 
     # 关键词模板均未命中 → 交给 LLM 生成 Cypher
     return None
 
 
-# ============== 5. LLM 生成 Cypher（兜底） ==============
-# 当模板没命中时，调 LLM 把自然语言转 Cypher
-llm = ChatOllama(
-    model=LLM_MODEL,
-    base_url=OLLAMA_BASE_URL,
-    temperature=LLM_TEMPERATURE,
-)
-
-CYPHER_GEN_PROMPT = ChatPromptTemplate.from_template("""
-你是 Cypher 专家。根据 Neo4j 图 schema 和用户问题，生成正确的 Cypher 查询。
-只输出 Cypher 一行语句（可以多行但不要带任何解释、不要 ``` 包裹）。
-
-Schema:
-- 节点 (:Paper) 属性: arxiv_id (String, 主键), short_id, title, first_author, year, short_name
-- 关系 -[:CITES]->  (Paper -> Paper)，表示源论文引用目标论文
-- 数据共 12 篇论文；CITES 方向为"新论文 → 旧论文"（引用方 → 被引用方）
-
-可用 arxiv_id 列表：
-{arxiv_ids}
-
-示例：
-问题：STAR 论文引用了哪些论文？
-Cypher：MATCH (a:Paper {{arxiv_id:'2605.18765'}})-[:CITES]->(b:Paper) RETURN b.title, b.short_name, b.year ORDER BY b.year
-
-问题：HiQA 论文是否引用了 RAPTOR？
-Cypher：MATCH (a:Paper {{arxiv_id:'2402.01767'}})-[:CITES]->(b:Paper {{arxiv_id:'2401.18059'}}) RETURN b.short_name
-
-问题：从 Lewis 2020 到 STAR 的引用路径是什么？
-Cypher：MATCH p = shortestPath((a:Paper {{arxiv_id:'2005.11401'}})-[:CITES*1..6]-(b:Paper {{arxiv_id:'2605.18765'}})) RETURN [n IN nodes(p) | n.short_name] AS path
-
-现在请回答：
-问题：{question}
-Cypher：""")
-
-CYPHER_CLEAN_RE = re.compile(r"```[a-zA-Z]*\n?|```")
-
-
-def clean_cypher(text: str) -> str:
-    """清洗 LLM 输出：去掉 ```cypher 包裹、首尾空白"""
-    text = CYPHER_CLEAN_RE.sub("", text).strip()
-    return text
-
-
-def llm_generate_cypher(question: str) -> str:
-    """LLM 生成 Cypher；不直接执行（交给调用方跑 + 兜底）"""
-    chain = CYPHER_GEN_PROMPT | llm | StrOutputParser()
-    arxiv_list = ", ".join(f"'{a}'" for a in sorted(set(PAPER_ALIASES.values())) if a in PAPERS)
-    raw = chain.invoke({"question": question, "arxiv_ids": arxiv_list})
-    return clean_cypher(raw)
-
-
-# ============== 6. 答案生成 ==============
+# ============== 5. 答案生成 ==============
 ANSWER_PROMPT = ChatPromptTemplate.from_template("""
 你是学术论文助手。根据图查询结果，用中文回答用户问题。
 
@@ -274,7 +220,8 @@ Cypher 查询：{cypher}
 3) 列出论文标题；如有多篇，用编号列出
 """)
 
-answer_chain = ANSWER_PROMPT | llm | StrOutputParser()
+def _answer_chain():
+    return ANSWER_PROMPT | get_chat_model() | StrOutputParser()
 
 
 def _llm_invoke_with_retry(chain, inputs: dict, max_retries: int = LLM_MAX_RETRIES) -> str:
@@ -322,20 +269,14 @@ def graphrag_query(question: str) -> dict:
     if tmpl is not None:
         cypher, rows, intent = tmpl
     else:
-        # 2) 兜底：LLM 生成 Cypher
-        cypher = ""
-        try:
-            cypher = llm_generate_cypher(question)
-            rows = _run_cypher(cypher)
-            intent = "llm_generated"
-        except Exception as e:
-            return {
-                "answer": f"图查询生成失败：{e}",
-                "cypher": cypher,
-                "results": [],
-                "intent": "failed",
-                "route": "GraphRAG",
-            }
+        return {
+            "answer": "暂时只支持查询论文之间的引用、被引用关系和引用路径。",
+            "cypher": "",
+            "results": [],
+            "intent": "unsupported",
+            "paper_titles": [],
+            "route": "GraphRAG",
+        }
 
     # 3) 用 LLM 整理成自然语言答案
     # boolean / path 类型答案已确定，不走 LLM 避免幻觉 + Ollama 不稳定
@@ -359,7 +300,7 @@ def graphrag_query(question: str) -> dict:
             answer = "图谱中未找到相关引用路径。"
     else:
         result_text = _format_result(intent, rows)
-        answer = _llm_invoke_with_retry(answer_chain, {
+        answer = _llm_invoke_with_retry(_answer_chain(), {
             "question": question,
             "intent": intent,
             "cypher": cypher,

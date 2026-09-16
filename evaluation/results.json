@@ -1,0 +1,3582 @@
+{
+  "experiment_context": {
+    "run_date_utc": "2026-09-16T09:53:48.631035+00:00",
+    "corpus": {
+      "papers_total": 7,
+      "papers_ready": 7,
+      "chunks_total": 475,
+      "golden_paper_versions": {
+        "2401.18059v1.pdf": "RAPTOR arXiv:2401.18059v1",
+        "2401.15884v1.pdf": "CRAG arXiv:2401.15884v1",
+        "2305.06983v2.pdf": "FLARE arXiv:2305.06983v2",
+        "2404.16130v2.pdf": "GraphRAG arXiv:2404.16130v2"
+      }
+    },
+    "embedding_model": "qwen3-embedding:4b",
+    "vector_size": 2560,
+    "qdrant_collection": "papers_v1",
+    "collection_version": "v1",
+    "qdrant_backend": "local_persistence:data/qdrant_local",
+    "top_k": 5,
+    "vector_candidate_k": 8,
+    "fts_candidate_k": 8,
+    "hybrid_final_k": 5,
+    "rrf_k": 60,
+    "refusal_mechanism": "answerability probe (LLM) + report claim gate; retrieval score is not a refusal threshold",
+    "hardware": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.6",
+      "cpu_count": 24,
+      "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel"
+    }
+  },
+  "retrieval_ablation": {
+    "dense_only": {
+      "metrics": {
+        "answer_case_count": 35,
+        "refuse_case_count": 5,
+        "recall_at_1": 0.6286,
+        "recall_at_5": 0.8,
+        "mrr": 0.6962,
+        "evidence_recall_at_1": 0.3429,
+        "evidence_recall_at_5": 0.6286,
+        "evidence_mrr": 0.4457,
+        "paper_question_count": 14,
+        "paper_recall_at_1": 0.8571,
+        "paper_recall_at_5": 0.9286,
+        "paper_mrr": 0.881,
+        "paper_evidence_recall_at_1": 0.1429,
+        "paper_evidence_recall_at_5": 0.5,
+        "paper_evidence_mrr": 0.2548,
+        "refuse_case_top_scores": [
+          {
+            "id": "noanswer-01",
+            "top_score": 0.53869
+          },
+          {
+            "id": "noanswer-02",
+            "top_score": 0.6416
+          },
+          {
+            "id": "noanswer-03",
+            "top_score": 0.46752
+          },
+          {
+            "id": "noanswer-04",
+            "top_score": 0.63298
+          },
+          {
+            "id": "noanswer-05",
+            "top_score": 0.50065
+          }
+        ]
+      },
+      "cases": [
+        {
+          "id": "internal-01",
+          "query": "Atlas 首期服务多少名员工",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.62817,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 3,
+          "evidence_complete_rank": 3
+        },
+        {
+          "id": "internal-02",
+          "query": "Atlas 日均查询量大约是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.51321,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md"
+          ],
+          "document_complete_rank": 5,
+          "evidence_complete_rank": 5
+        },
+        {
+          "id": "internal-03",
+          "query": "知识库初期文档规模有多少份",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.6152,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2401.15884v1.pdf",
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-04",
+          "query": "超过 30 页的长文档占比是多少",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.51062,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-05",
+          "query": "每天新增或变更的文档数量",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.49126,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-06",
+          "query": "语料里中文和英文的比例",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p18:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.49214,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-07",
+          "query": "普通问题首屏响应时间目标",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.44793,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-08",
+          "query": "复杂跨文档问题允许的生成时间",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p9:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.59341,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-09",
+          "query": "原始内部文档能否完整上传到第三方服务",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.51999,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-10",
+          "query": "什么内容允许发送给已签约的大模型 API",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p12:c1",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.54302,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-11",
+          "query": "日志中禁止保存哪些信息",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p17:c0",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.44652,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-12",
+          "query": "现有服务器的 CPU 内存和 GPU 配置",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p17:c0",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.45126,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-13",
+          "query": "团队是否具备大规模图数据库生产经验",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.54126,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-14",
+          "query": "首期交付的团队人数和周期",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c1",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.45458,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "02_architecture_constraints.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-15",
+          "query": "当前基线的分块大小和重叠字符数",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.54746,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-16",
+          "query": "当前基线使用什么检索方式",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.60453,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-17",
+          "query": "内部 60 道问题人工标注的 Recall@5 基线是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.63539,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2401.15884v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-18",
+          "query": "基线引用存在率和引用能支持结论的比例分别是多少",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c2",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.57139,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-19",
+          "query": "全量重建索引需要多长时间",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.59366,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-20",
+          "query": "为什么长文档的概括性问题容易只命中局部段落",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p3:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.53615,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-01",
+          "query": "RAPTOR 的英文全称和核心思想是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.60881,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-02",
+          "query": "RAPTOR 如何自底向上构建不同摘要层级的树",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p15:c2",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.70382,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-03",
+          "query": "RAPTOR 的 tree traversal 和 collapsed tree 检索方式有什么区别",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p4:c5",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.72837,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 3
+        },
+        {
+          "id": "crag-01",
+          "query": "CRAG 全称是什么，检索评估器有哪三种动作",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p4:c2",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.57444,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-02",
+          "query": "CRAG 如何评估检索文档的相关性和可靠程度",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p4:c2",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.66374,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-03",
+          "query": "CRAG 的 decompose-then-recompose 算法如何去除冗余上下文",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p2:c3",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.72334,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "flare-01",
+          "query": "FLARE 的英文全称和前瞻性主动检索是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p4:c2",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.58507,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 3
+        },
+        {
+          "id": "flare-02",
+          "query": "FLARE 根据什么置信度信号决定触发检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p4:c2",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.64827,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "flare-03",
+          "query": "FLARE 如何在长文本生成中迭代检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p1:c1",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.70899,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 5
+        },
+        {
+          "id": "graphrag-01",
+          "query": "GraphRAG 为什么说普通 RAG 回答不了面向整个语料库的全局问题",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p2:c6",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.73756,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 5
+        },
+        {
+          "id": "graphrag-02",
+          "query": "GraphRAG 如何用社区摘要组合出全局答案",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p12:c1",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.73267,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "graphrag-03",
+          "query": "GraphRAG 索引流水线如何抽取实体关系并用 Leiden 构建社区",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p4:c0",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.76861,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "cross-01",
+          "query": "团队没有图数据库经验且要 4 人 8 周交付，GraphRAG 的全局问题能力是否值得引入",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [
+            "2404.16130v2.pdf",
+            "02_architecture_constraints.md"
+          ],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.64391,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "cross-02",
+          "query": "哪种方案会显式判断检索是否出错并纠错，适合每日更新的知识库",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [
+            "2401.15884v1.pdf",
+            "03_operations_baseline.md"
+          ],
+          "top_chunk": "local-efc0de696312:p5:c1",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.62826,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "03_operations_baseline.md",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 3,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "conflict-01",
+          "query": "GraphRAG 论文宣称能回答全局问题，为什么在 Atlas 当前约束下仍可能不推荐它",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf"
+          ],
+          "top_chunk": "local-730f1a9f38d1:p2:c6",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.67051,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-01",
+          "query": "Atlas 明年的市场推广预算是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.53869,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-02",
+          "query": "Atlas 是否通过了 SOC2 安全合规认证",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.6416,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-03",
+          "query": "Qdrant 企业版每年的商业授权费用是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c1",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.46752,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-04",
+          "query": "RAPTOR 在中文法律合同数据集上的准确率是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c3",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.63298,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-05",
+          "query": "公司 CEO 叫什么名字",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p21:c3",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.50065,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        }
+      ]
+    },
+    "fts5_only": {
+      "metrics": {
+        "answer_case_count": 35,
+        "refuse_case_count": 5,
+        "recall_at_1": 0.5143,
+        "recall_at_5": 0.5429,
+        "mrr": 0.5214,
+        "evidence_recall_at_1": 0.1714,
+        "evidence_recall_at_5": 0.2571,
+        "evidence_mrr": 0.201,
+        "paper_question_count": 14,
+        "paper_recall_at_1": 0.8571,
+        "paper_recall_at_5": 0.8571,
+        "paper_mrr": 0.8571,
+        "paper_evidence_recall_at_1": 0.0,
+        "paper_evidence_recall_at_5": 0.2143,
+        "paper_evidence_mrr": 0.0738,
+        "refuse_case_top_scores": [
+          {
+            "id": "noanswer-01",
+            "top_score": 1.0
+          },
+          {
+            "id": "noanswer-02",
+            "top_score": 1.0
+          },
+          {
+            "id": "noanswer-03",
+            "top_score": 0.0
+          },
+          {
+            "id": "noanswer-04",
+            "top_score": 1.0
+          },
+          {
+            "id": "noanswer-05",
+            "top_score": 1.0
+          }
+        ]
+      },
+      "cases": [
+        {
+          "id": "internal-01",
+          "query": "Atlas 首期服务多少名员工",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-02",
+          "query": "Atlas 日均查询量大约是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-03",
+          "query": "知识库初期文档规模有多少份",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-04",
+          "query": "超过 30 页的长文档占比是多少",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-05",
+          "query": "每天新增或变更的文档数量",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-06",
+          "query": "语料里中文和英文的比例",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-07",
+          "query": "普通问题首屏响应时间目标",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-08",
+          "query": "复杂跨文档问题允许的生成时间",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-09",
+          "query": "原始内部文档能否完整上传到第三方服务",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-10",
+          "query": "什么内容允许发送给已签约的大模型 API",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2305.06983v2.pdf",
+            "2401.15884v1.pdf",
+            "2401.18059v1.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-11",
+          "query": "日志中禁止保存哪些信息",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-12",
+          "query": "现有服务器的 CPU 内存和 GPU 配置",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-13",
+          "query": "团队是否具备大规模图数据库生产经验",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-14",
+          "query": "首期交付的团队人数和周期",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-15",
+          "query": "当前基线的分块大小和重叠字符数",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-16",
+          "query": "当前基线使用什么检索方式",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-17",
+          "query": "内部 60 道问题人工标注的 Recall@5 基线是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-18",
+          "query": "基线引用存在率和引用能支持结论的比例分别是多少",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-19",
+          "query": "全量重建索引需要多长时间",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-20",
+          "query": "为什么长文档的概括性问题容易只命中局部段落",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-01",
+          "query": "RAPTOR 的英文全称和核心思想是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c2",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-02",
+          "query": "RAPTOR 如何自底向上构建不同摘要层级的树",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c2",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-03",
+          "query": "RAPTOR 的 tree traversal 和 collapsed tree 检索方式有什么区别",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p4:c5",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 5
+        },
+        {
+          "id": "crag-01",
+          "query": "CRAG 全称是什么，检索评估器有哪三种动作",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p9:c1",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-02",
+          "query": "CRAG 如何评估检索文档的相关性和可靠程度",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p9:c1",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-03",
+          "query": "CRAG 的 decompose-then-recompose 算法如何去除冗余上下文",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p1:c1",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "flare-01",
+          "query": "FLARE 的英文全称和前瞻性主动检索是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p2:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "flare-02",
+          "query": "FLARE 根据什么置信度信号决定触发检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p2:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "flare-03",
+          "query": "FLARE 如何在长文本生成中迭代检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p2:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "graphrag-01",
+          "query": "GraphRAG 为什么说普通 RAG 回答不了面向整个语料库的全局问题",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "graphrag-02",
+          "query": "GraphRAG 如何用社区摘要组合出全局答案",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "graphrag-03",
+          "query": "GraphRAG 索引流水线如何抽取实体关系并用 Leiden 构建社区",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p5:c5",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 3
+        },
+        {
+          "id": "cross-01",
+          "query": "团队没有图数据库经验且要 4 人 8 周交付，GraphRAG 的全局问题能力是否值得引入",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [
+            "2404.16130v2.pdf",
+            "02_architecture_constraints.md"
+          ],
+          "top_chunk": "local-2425bd04de6e:p16:c1",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2401.15884v1.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "cross-02",
+          "query": "哪种方案会显式判断检索是否出错并纠错，适合每日更新的知识库",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [
+            "2401.15884v1.pdf",
+            "03_operations_baseline.md"
+          ],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "conflict-01",
+          "query": "GraphRAG 论文宣称能回答全局问题，为什么在 Atlas 当前约束下仍可能不推荐它",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf"
+          ],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 4,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-01",
+          "query": "Atlas 明年的市场推广预算是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-02",
+          "query": "Atlas 是否通过了 SOC2 安全合规认证",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 1.0,
+          "retrieved": [
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-03",
+          "query": "Qdrant 企业版每年的商业授权费用是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": null,
+          "top_source": null,
+          "top_score": 0.0,
+          "retrieved": [],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-04",
+          "query": "RAPTOR 在中文法律合同数据集上的准确率是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c2",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-05",
+          "query": "公司 CEO 叫什么名字",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c0",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 1.0,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        }
+      ]
+    },
+    "hybrid_rrf": {
+      "metrics": {
+        "answer_case_count": 35,
+        "refuse_case_count": 5,
+        "recall_at_1": 0.6571,
+        "recall_at_5": 0.8286,
+        "mrr": 0.7262,
+        "evidence_recall_at_1": 0.3714,
+        "evidence_recall_at_5": 0.6,
+        "evidence_mrr": 0.4581,
+        "paper_question_count": 14,
+        "paper_recall_at_1": 0.8571,
+        "paper_recall_at_5": 0.9286,
+        "paper_mrr": 0.881,
+        "paper_evidence_recall_at_1": 0.1429,
+        "paper_evidence_recall_at_5": 0.3571,
+        "paper_evidence_mrr": 0.2107,
+        "refuse_case_top_scores": [
+          {
+            "id": "noanswer-01",
+            "top_score": 0.03227
+          },
+          {
+            "id": "noanswer-02",
+            "top_score": 0.03227
+          },
+          {
+            "id": "noanswer-03",
+            "top_score": 0.01639
+          },
+          {
+            "id": "noanswer-04",
+            "top_score": 0.03178
+          },
+          {
+            "id": "noanswer-05",
+            "top_score": 0.03252
+          }
+        ]
+      },
+      "cases": [
+        {
+          "id": "internal-01",
+          "query": "Atlas 首期服务多少名员工",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03227,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-02",
+          "query": "Atlas 日均查询量大约是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.03252,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "01_product_requirements.md",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 3,
+          "evidence_complete_rank": 3
+        },
+        {
+          "id": "internal-03",
+          "query": "知识库初期文档规模有多少份",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2401.15884v1.pdf",
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-04",
+          "query": "超过 30 页的长文档占比是多少",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.03279,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-05",
+          "query": "每天新增或变更的文档数量",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-06",
+          "query": "语料里中文和英文的比例",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p18:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-07",
+          "query": "普通问题首屏响应时间目标",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-08",
+          "query": "复杂跨文档问题允许的生成时间",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p9:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-09",
+          "query": "原始内部文档能否完整上传到第三方服务",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-10",
+          "query": "什么内容允许发送给已签约的大模型 API",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p10:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03033,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2305.06983v2.pdf",
+            "2401.15884v1.pdf",
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 4,
+          "evidence_complete_rank": 4
+        },
+        {
+          "id": "internal-11",
+          "query": "日志中禁止保存哪些信息",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p17:c0",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-12",
+          "query": "现有服务器的 CPU 内存和 GPU 配置",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03252,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-13",
+          "query": "团队是否具备大规模图数据库生产经验",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-14",
+          "query": "首期交付的团队人数和周期",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c1",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "02_architecture_constraints.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-15",
+          "query": "当前基线的分块大小和重叠字符数",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-16",
+          "query": "当前基线使用什么检索方式",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-17",
+          "query": "内部 60 道问题人工标注的 Recall@5 基线是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.03279,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-18",
+          "query": "基线引用存在率和引用能支持结论的比例分别是多少",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c2",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-19",
+          "query": "全量重建索引需要多长时间",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-20",
+          "query": "为什么长文档的概括性问题容易只命中局部段落",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p3:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-01",
+          "query": "RAPTOR 的英文全称和核心思想是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03227,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-02",
+          "query": "RAPTOR 如何自底向上构建不同摘要层级的树",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p9:c3",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.02941,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-03",
+          "query": "RAPTOR 的 tree traversal 和 collapsed tree 检索方式有什么区别",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p4:c5",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03279,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "crag-01",
+          "query": "CRAG 全称是什么，检索评估器有哪三种动作",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p9:c2",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.032,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-02",
+          "query": "CRAG 如何评估检索文档的相关性和可靠程度",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p9:c2",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.03102,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-03",
+          "query": "CRAG 的 decompose-then-recompose 算法如何去除冗余上下文",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p2:c3",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.03252,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "flare-01",
+          "query": "FLARE 的英文全称和前瞻性主动检索是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p4:c2",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 5
+        },
+        {
+          "id": "flare-02",
+          "query": "FLARE 根据什么置信度信号决定触发检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p2:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.03178,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "flare-03",
+          "query": "FLARE 如何在长文本生成中迭代检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p2:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.03132,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "graphrag-01",
+          "query": "GraphRAG 为什么说普通 RAG 回答不了面向整个语料库的全局问题",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03154,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "graphrag-02",
+          "query": "GraphRAG 如何用社区摘要组合出全局答案",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p2:c2",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03125,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 4
+        },
+        {
+          "id": "graphrag-03",
+          "query": "GraphRAG 索引流水线如何抽取实体关系并用 Leiden 构建社区",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p4:c0",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03227,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "cross-01",
+          "query": "团队没有图数据库经验且要 4 人 8 周交付，GraphRAG 的全局问题能力是否值得引入",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [
+            "2404.16130v2.pdf",
+            "02_architecture_constraints.md"
+          ],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2401.15884v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "cross-02",
+          "query": "哪种方案会显式判断检索是否出错并纠错，适合每日更新的知识库",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [
+            "2401.15884v1.pdf",
+            "03_operations_baseline.md"
+          ],
+          "top_chunk": "local-efc0de696312:p5:c1",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "03_operations_baseline.md",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 3,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "conflict-01",
+          "query": "GraphRAG 论文宣称能回答全局问题，为什么在 Atlas 当前约束下仍可能不推荐它",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf"
+          ],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03175,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-01",
+          "query": "Atlas 明年的市场推广预算是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03227,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-02",
+          "query": "Atlas 是否通过了 SOC2 安全合规认证",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03227,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-03",
+          "query": "Qdrant 企业版每年的商业授权费用是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c1",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-04",
+          "query": "RAPTOR 在中文法律合同数据集上的准确率是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c2",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03178,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-05",
+          "query": "公司 CEO 叫什么名字",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c0",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03252,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        }
+      ]
+    },
+    "hybrid_graph": {
+      "metrics": {
+        "answer_case_count": 35,
+        "refuse_case_count": 5,
+        "recall_at_1": 0.6571,
+        "recall_at_5": 0.8286,
+        "mrr": 0.7262,
+        "evidence_recall_at_1": 0.3714,
+        "evidence_recall_at_5": 0.5714,
+        "evidence_mrr": 0.4524,
+        "paper_question_count": 14,
+        "paper_recall_at_1": 0.8571,
+        "paper_recall_at_5": 0.9286,
+        "paper_mrr": 0.881,
+        "paper_evidence_recall_at_1": 0.1429,
+        "paper_evidence_recall_at_5": 0.2857,
+        "paper_evidence_mrr": 0.1964,
+        "refuse_case_top_scores": [
+          {
+            "id": "noanswer-01",
+            "top_score": 0.03227
+          },
+          {
+            "id": "noanswer-02",
+            "top_score": 0.03227
+          },
+          {
+            "id": "noanswer-03",
+            "top_score": 0.01639
+          },
+          {
+            "id": "noanswer-04",
+            "top_score": 0.03678
+          },
+          {
+            "id": "noanswer-05",
+            "top_score": 0.03252
+          }
+        ]
+      },
+      "cases": [
+        {
+          "id": "internal-01",
+          "query": "Atlas 首期服务多少名员工",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03227,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-02",
+          "query": "Atlas 日均查询量大约是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.03252,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "02_architecture_constraints.md",
+            "01_product_requirements.md",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 3,
+          "evidence_complete_rank": 3
+        },
+        {
+          "id": "internal-03",
+          "query": "知识库初期文档规模有多少份",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2401.15884v1.pdf",
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-04",
+          "query": "超过 30 页的长文档占比是多少",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.03279,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-05",
+          "query": "每天新增或变更的文档数量",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-06",
+          "query": "语料里中文和英文的比例",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p18:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-07",
+          "query": "普通问题首屏响应时间目标",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-bcba105fe48f:p1:c0",
+          "top_source": "01_product_requirements.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-08",
+          "query": "复杂跨文档问题允许的生成时间",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "01_product_requirements.md",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p9:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-09",
+          "query": "原始内部文档能否完整上传到第三方服务",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-10",
+          "query": "什么内容允许发送给已签约的大模型 API",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p10:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03033,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2305.06983v2.pdf",
+            "2401.15884v1.pdf",
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 4,
+          "evidence_complete_rank": 4
+        },
+        {
+          "id": "internal-11",
+          "query": "日志中禁止保存哪些信息",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p17:c0",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "internal-12",
+          "query": "现有服务器的 CPU 内存和 GPU 配置",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03252,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-13",
+          "query": "团队是否具备大规模图数据库生产经验",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-14",
+          "query": "首期交付的团队人数和周期",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c1",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "02_architecture_constraints.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-15",
+          "query": "当前基线的分块大小和重叠字符数",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-16",
+          "query": "当前基线使用什么检索方式",
+          "query_type": "internal_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-17",
+          "query": "内部 60 道问题人工标注的 Recall@5 基线是多少",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.03279,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-18",
+          "query": "基线引用存在率和引用能支持结论的比例分别是多少",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c2",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 2,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "internal-19",
+          "query": "全量重建索引需要多长时间",
+          "query_type": "numeric",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-092d1a94ec09:p1:c0",
+          "top_source": "03_operations_baseline.md",
+          "top_score": 0.01639,
+          "retrieved": [
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "internal-20",
+          "query": "为什么长文档的概括性问题容易只命中局部段落",
+          "query_type": "long_document",
+          "expected_behavior": "answer",
+          "relevant_source": "03_operations_baseline.md",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p3:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-01",
+          "query": "RAPTOR 的英文全称和核心思想是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c0",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03727,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-02",
+          "query": "RAPTOR 如何自底向上构建不同摘要层级的树",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p9:c3",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03441,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "raptor-03",
+          "query": "RAPTOR 的 tree traversal 和 collapsed tree 检索方式有什么区别",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.18059v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p4:c5",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03779,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 2
+        },
+        {
+          "id": "crag-01",
+          "query": "CRAG 全称是什么，检索评估器有哪三种动作",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p9:c2",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.037,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-02",
+          "query": "CRAG 如何评估检索文档的相关性和可靠程度",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p9:c2",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.03602,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "crag-03",
+          "query": "CRAG 的 decompose-then-recompose 算法如何去除冗余上下文",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-efc0de696312:p2:c3",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.03752,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "flare-01",
+          "query": "FLARE 的英文全称和前瞻性主动检索是什么",
+          "query_type": "abbreviation",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p4:c2",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.02139,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "flare-02",
+          "query": "FLARE 根据什么置信度信号决定触发检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p2:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.03678,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "flare-03",
+          "query": "FLARE 如何在长文本生成中迭代检索",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2305.06983v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-2425bd04de6e:p2:c5",
+          "top_source": "2305.06983v2.pdf",
+          "top_score": 0.03632,
+          "retrieved": [
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "graphrag-01",
+          "query": "GraphRAG 为什么说普通 RAG 回答不了面向整个语料库的全局问题",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03154,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "graphrag-02",
+          "query": "GraphRAG 如何用社区摘要组合出全局答案",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p2:c2",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03125,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 4
+        },
+        {
+          "id": "graphrag-03",
+          "query": "GraphRAG 索引流水线如何抽取实体关系并用 Leiden 构建社区",
+          "query_type": "paper_fact",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p4:c0",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03227,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": 1,
+          "evidence_complete_rank": 1
+        },
+        {
+          "id": "cross-01",
+          "query": "团队没有图数据库经验且要 4 人 8 周交付，GraphRAG 的全局问题能力是否值得引入",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2404.16130v2.pdf",
+          "relevant_sources": [
+            "2404.16130v2.pdf",
+            "02_architecture_constraints.md"
+          ],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf",
+            "2404.16130v2.pdf",
+            "2401.15884v1.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "cross-02",
+          "query": "哪种方案会显式判断检索是否出错并纠错，适合每日更新的知识库",
+          "query_type": "cross_document",
+          "expected_behavior": "answer",
+          "relevant_source": "2401.15884v1.pdf",
+          "relevant_sources": [
+            "2401.15884v1.pdf",
+            "03_operations_baseline.md"
+          ],
+          "top_chunk": "local-efc0de696312:p5:c1",
+          "top_source": "2401.15884v1.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf",
+            "03_operations_baseline.md",
+            "2401.15884v1.pdf",
+            "2401.15884v1.pdf"
+          ],
+          "document_complete_rank": 3,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "conflict-01",
+          "query": "GraphRAG 论文宣称能回答全局问题，为什么在 Atlas 当前约束下仍可能不推荐它",
+          "query_type": "conflict",
+          "expected_behavior": "answer",
+          "relevant_source": "02_architecture_constraints.md",
+          "relevant_sources": [
+            "02_architecture_constraints.md",
+            "2404.16130v2.pdf"
+          ],
+          "top_chunk": "local-730f1a9f38d1:p2:c4",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03175,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "01_product_requirements.md",
+            "03_operations_baseline.md",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-01",
+          "query": "Atlas 明年的市场推广预算是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03227,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-02",
+          "query": "Atlas 是否通过了 SOC2 安全合规认证",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-f4c9fff07eb3:p1:c0",
+          "top_source": "02_architecture_constraints.md",
+          "top_score": 0.03227,
+          "retrieved": [
+            "02_architecture_constraints.md",
+            "03_operations_baseline.md",
+            "01_product_requirements.md",
+            "2404.16130v2.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-03",
+          "query": "Qdrant 企业版每年的商业授权费用是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c1",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.01639,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2305.06983v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-04",
+          "query": "RAPTOR 在中文法律合同数据集上的准确率是多少",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-01319e2e6e6e:p7:c2",
+          "top_source": "2401.18059v1.pdf",
+          "top_score": 0.03678,
+          "retrieved": [
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf",
+            "2401.18059v1.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        },
+        {
+          "id": "noanswer-05",
+          "query": "公司 CEO 叫什么名字",
+          "query_type": "no_answer",
+          "expected_behavior": "refuse",
+          "relevant_source": "",
+          "relevant_sources": [],
+          "top_chunk": "local-730f1a9f38d1:p24:c0",
+          "top_source": "2404.16130v2.pdf",
+          "top_score": 0.03252,
+          "retrieved": [
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf",
+            "2404.16130v2.pdf"
+          ],
+          "document_complete_rank": null,
+          "evidence_complete_rank": null
+        }
+      ]
+    }
+  },
+  "answerability": {
+    "checker": "llm_answerability",
+    "refuse_case_count": 5,
+    "sampled_answer_case_count": 9,
+    "noanswer_accuracy": 1.0,
+    "sampled_answer_accuracy": 0.6667,
+    "cases": [
+      {
+        "id": "noanswer-01",
+        "query": "Atlas 明年的市场推广预算是多少",
+        "expected": "refuse",
+        "predicted": "refuse",
+        "correct": true,
+        "reason": "检索片段中未提及Atlas明年的市场推广预算相关信息",
+        "error": null
+      },
+      {
+        "id": "noanswer-02",
+        "query": "Atlas 是否通过了 SOC2 安全合规认证",
+        "expected": "refuse",
+        "predicted": "refuse",
+        "correct": true,
+        "reason": "检索片段中未提及Atlas是否通过了SOC2安全合规认证",
+        "error": null
+      },
+      {
+        "id": "noanswer-03",
+        "query": "Qdrant 企业版每年的商业授权费用是多少",
+        "expected": "refuse",
+        "predicted": "refuse",
+        "correct": true,
+        "reason": "检索片段中未提及Qdrant企业版每年商业授权费用的相关信息",
+        "error": null
+      },
+      {
+        "id": "noanswer-04",
+        "query": "RAPTOR 在中文法律合同数据集上的准确率是多少",
+        "expected": "refuse",
+        "predicted": "refuse",
+        "correct": true,
+        "reason": "检索片段中未提及中文法律合同数据集",
+        "error": null
+      },
+      {
+        "id": "noanswer-05",
+        "query": "公司 CEO 叫什么名字",
+        "expected": "refuse",
+        "predicted": "refuse",
+        "correct": true,
+        "reason": "检索片段中未提及公司CEO的名字",
+        "error": null
+      },
+      {
+        "id": "internal-01",
+        "query": "Atlas 首期服务多少名员工",
+        "expected": "answer",
+        "predicted": "answer",
+        "correct": true,
+        "reason": "从文档中可以直接找到答案",
+        "error": null
+      },
+      {
+        "id": "internal-05",
+        "query": "每天新增或变更的文档数量",
+        "expected": "answer",
+        "predicted": "answer",
+        "correct": true,
+        "reason": "检索片段中明确提到了每天新增或变更的文档数量",
+        "error": null
+      },
+      {
+        "id": "internal-09",
+        "query": "原始内部文档能否完整上传到第三方服务",
+        "expected": "answer",
+        "predicted": "refuse",
+        "correct": false,
+        "reason": "片段中未提及原始内部文档能否完整上传到第三方服务的信息",
+        "error": null
+      },
+      {
+        "id": "internal-13",
+        "query": "团队是否具备大规模图数据库生产经验",
+        "expected": "answer",
+        "predicted": "answer",
+        "correct": true,
+        "reason": "从片段2中可以得知团队没有大规模图数据库生产经验。",
+        "error": null
+      },
+      {
+        "id": "internal-17",
+        "query": "内部 60 道问题人工标注的 Recall@5 基线是多少",
+        "expected": "answer",
+        "predicted": "answer",
+        "correct": true,
+        "reason": "片段中明确提到了人工标注的 Recall@5 基线值为 0.68",
+        "error": null
+      },
+      {
+        "id": "raptor-01",
+        "query": "RAPTOR 的英文全称和核心思想是什么",
+        "expected": "answer",
+        "predicted": "refuse",
+        "correct": false,
+        "reason": "检索片段中没有提供 RAPTOR 的英文全称和核心思想",
+        "error": null
+      },
+      {
+        "id": "crag-02",
+        "query": "CRAG 如何评估检索文档的相关性和可靠程度",
+        "expected": "answer",
+        "predicted": "answer",
+        "correct": true,
+        "reason": "从片段[3]可以得知CRAG使用了一个基于T5-large的评估器来评估检索文档的相关性。",
+        "error": null
+      },
+      {
+        "id": "flare-03",
+        "query": "FLARE 如何在长文本生成中迭代检索",
+        "expected": "answer",
+        "predicted": "answer",
+        "correct": true,
+        "reason": "检索片段详细描述了FLARE在长文本生成中的迭代检索过程",
+        "error": null
+      },
+      {
+        "id": "cross-01",
+        "query": "团队没有图数据库经验且要 4 人 8 周交付，GraphRAG 的全局问题能力是否值得引入",
+        "expected": "answer",
+        "predicted": "refuse",
+        "correct": false,
+        "reason": "片段未提供关于GraphRAG在没有图数据库经验团队中的适用性或具体建议",
+        "error": null
+      }
+    ],
+    "model": "qwen2.5:7b"
+  },
+  "claim_validation": {
+    "case_count": 7,
+    "pass_rate": 1.0,
+    "positive_citation_existence_rate": 1.0,
+    "positive_claim_evidence_coverage": 1.0,
+    "negative_rejection_rate": 1.0,
+    "cases": [
+      {
+        "id": "claim-supported",
+        "expected_approval": true,
+        "actual_approval": true,
+        "citation_existence_rate": 1.0,
+        "claim_evidence_coverage": 1.0,
+        "support_counts": {
+          "supported": 1,
+          "partially_supported": 0,
+          "conflicted": 0,
+          "insufficient": 0
+        },
+        "hard_errors": [],
+        "passed": true
+      },
+      {
+        "id": "claim-fabricated",
+        "expected_approval": false,
+        "actual_approval": false,
+        "citation_existence_rate": 0.0,
+        "claim_evidence_coverage": 0.0,
+        "support_counts": {
+          "supported": 0,
+          "partially_supported": 0,
+          "conflicted": 0,
+          "insufficient": 1
+        },
+        "hard_errors": [
+          "fabricated_citation"
+        ],
+        "passed": true
+      },
+      {
+        "id": "claim-unsupported",
+        "expected_approval": false,
+        "actual_approval": false,
+        "citation_existence_rate": 1.0,
+        "claim_evidence_coverage": 0.0,
+        "support_counts": {
+          "supported": 0,
+          "partially_supported": 0,
+          "conflicted": 0,
+          "insufficient": 1
+        },
+        "hard_errors": [],
+        "passed": true
+      },
+      {
+        "id": "claim-insufficient",
+        "expected_approval": false,
+        "actual_approval": false,
+        "citation_existence_rate": 1.0,
+        "claim_evidence_coverage": 0.0,
+        "support_counts": {
+          "supported": 0,
+          "partially_supported": 0,
+          "conflicted": 0,
+          "insufficient": 1
+        },
+        "hard_errors": [],
+        "passed": true
+      },
+      {
+        "id": "claim-inference-marked",
+        "expected_approval": true,
+        "actual_approval": true,
+        "citation_existence_rate": 1.0,
+        "claim_evidence_coverage": 1.0,
+        "support_counts": {
+          "supported": 1,
+          "partially_supported": 0,
+          "conflicted": 0,
+          "insufficient": 1
+        },
+        "hard_errors": [],
+        "passed": true
+      },
+      {
+        "id": "claim-conflicted",
+        "expected_approval": false,
+        "actual_approval": false,
+        "citation_existence_rate": 1.0,
+        "claim_evidence_coverage": 0.0,
+        "support_counts": {
+          "supported": 0,
+          "partially_supported": 0,
+          "conflicted": 1,
+          "insufficient": 0
+        },
+        "hard_errors": [],
+        "passed": true
+      },
+      {
+        "id": "claim-uncited-fact",
+        "expected_approval": false,
+        "actual_approval": false,
+        "citation_existence_rate": 1.0,
+        "claim_evidence_coverage": 0.5,
+        "support_counts": {
+          "supported": 1,
+          "partially_supported": 0,
+          "conflicted": 0,
+          "insufficient": 1
+        },
+        "hard_errors": [
+          "missing_citation"
+        ],
+        "passed": true
+      }
+    ]
+  }
+}

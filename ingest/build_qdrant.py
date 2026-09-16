@@ -36,14 +36,14 @@ def main():
     print(f"[build_qdrant] {len(chunks)} chunks")
 
     client = QdrantClient(url=QDRANT_URL)
-    if client.collection_exists(QDRANT_COLLECTION):
-        print(f"[build_qdrant] dropping existing '{QDRANT_COLLECTION}'")
-        client.delete_collection(QDRANT_COLLECTION)
-    client.create_collection(
-        collection_name=QDRANT_COLLECTION,
-        vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
-    )
-    print(f"[build_qdrant] created '{QDRANT_COLLECTION}' (dim={VECTOR_SIZE}, cosine)")
+    if not client.collection_exists(QDRANT_COLLECTION):
+        client.create_collection(
+            collection_name=QDRANT_COLLECTION,
+            vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
+        )
+        print(f"[build_qdrant] created '{QDRANT_COLLECTION}' (dim={VECTOR_SIZE}, cosine)")
+    else:
+        print(f"[build_qdrant] reusing '{QDRANT_COLLECTION}' without deleting existing points")
 
     print(f"[build_qdrant] embedding model = {EMBED_MODEL}")
     # 4b embedding 模型在 GPU 上 ~0.1s/chunk；CPU 上要 1s+/chunk，差异巨大

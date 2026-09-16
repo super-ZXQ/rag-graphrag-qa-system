@@ -1,0 +1,63 @@
+[
+  {
+    "id": "claim-supported",
+    "description": "关键结论与证据高度重合，应通过。",
+    "evidence": [
+      {"evidence_id": "E-p1-p2-c0", "paper_id": "p1", "chunk_id": "p1:p2:c0", "page_number": 2, "title": "CRAG", "text": "The corrective retrieval method evaluates retrieval confidence and triggers three actions: correct, incorrect and ambiguous."}
+    ],
+    "markdown": "The corrective retrieval method evaluates retrieval confidence and triggers three actions [E-p1-p2-c0].",
+    "expected": {"approval_allowed": true, "support_status": "supported"}
+  },
+  {
+    "id": "claim-fabricated",
+    "description": "引用不存在的证据 ID，必须拒绝。",
+    "evidence": [
+      {"evidence_id": "E-p1-p2-c0", "paper_id": "p1", "chunk_id": "p1:p2:c0", "page_number": 2, "title": "CRAG", "text": "The corrective retrieval method evaluates retrieval confidence."}
+    ],
+    "markdown": "The system improves throughput by 40 percent [E-made-up-id].",
+    "expected": {"approval_allowed": false, "support_status": "insufficient"}
+  },
+  {
+    "id": "claim-unsupported",
+    "description": "引用存在但证据内容与结论无关，不得判为支持。",
+    "evidence": [
+      {"evidence_id": "E-p1-p3-c1", "paper_id": "p1", "chunk_id": "p1:p3:c1", "page_number": 3, "title": "RAPTOR", "text": "We build a tree of summaries by recursively clustering and summarizing text blocks."}
+    ],
+    "markdown": "GraphRAG uses Leiden community detection to answer global questions [E-p1-p3-c1].",
+    "expected": {"approval_allowed": false, "support_status": "insufficient"}
+  },
+  {
+    "id": "claim-insufficient",
+    "description": "没有任何证据时必须拒绝推荐。",
+    "evidence": [],
+    "markdown": "# 报告\n\n证据不足，无法给出推荐。",
+    "expected": {"approval_allowed": false, "support_status": "insufficient"}
+  },
+  {
+    "id": "claim-inference-marked",
+    "description": "工程推断应被单独归类，事实有证据时整体可通过。",
+    "evidence": [
+      {"evidence_id": "E-p2-p1-c0", "paper_id": "p2", "chunk_id": "p2:p1:c0", "page_number": 1, "title": "GraphRAG", "text": "GraphRAG generates community summaries so global questions over the corpus can be answered."}
+    ],
+    "markdown": "GraphRAG generates community summaries for global questions [E-p2-p1-c0].\n建议先用两周做 POC 评估实施成本 [E-p2-p1-c0].",
+    "expected": {"approval_allowed": true, "support_status": "supported"}
+  },
+  {
+    "id": "claim-conflicted",
+    "description": "证据出现与结论相反的表述时应标冲突并拒绝。",
+    "evidence": [
+      {"evidence_id": "E-p3-p5-c2", "paper_id": "p3", "chunk_id": "p3:p5:c2", "page_number": 5, "title": "Baseline", "text": "Experiments show the extra reranker does not improve latency or accuracy on this dataset."}
+    ],
+    "markdown": "The extra reranker improves latency and accuracy [E-p3-p5-c2].",
+    "expected": {"approval_allowed": false, "support_status": "conflicted"}
+  },
+  {
+    "id": "claim-uncited-fact",
+    "description": "报告混入无引用关键事实时必须拒绝。",
+    "evidence": [
+      {"evidence_id": "E-p4-p1-c0", "paper_id": "p4", "chunk_id": "p4:p1:c0", "page_number": 1, "title": "Internal requirement", "text": "Atlas serves 100 employees in the first phase."}
+    ],
+    "markdown": "Atlas serves 100 employees in the first phase [E-p4-p1-c0].\nAtlas has passed SOC2 certification.",
+    "expected": {"approval_allowed": false, "support_status": "insufficient"}
+  }
+]

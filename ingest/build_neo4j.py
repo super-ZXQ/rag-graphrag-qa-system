@@ -23,9 +23,10 @@ def main():
 
     driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
     with driver.session(database=NEO4J_DATABASE) as s:
-        # 清空旧数据（避免测试残留）
-        s.run("MATCH (n) DETACH DELETE n")
-        print("[build_neo4j] cleared existing graph")
+        # 只管理论文之间的引用边，绝不删除同一数据库里的其他业务节点。
+        s.run("CREATE CONSTRAINT paper_arxiv_id IF NOT EXISTS FOR (n:Paper) REQUIRE n.arxiv_id IS UNIQUE")
+        s.run("MATCH (:Paper)-[r:CITES]->(:Paper) DELETE r")
+        print("[build_neo4j] cleared existing Paper-to-Paper CITES relations")
 
         # 1) 建节点
         s.run(

@@ -1,0 +1,48 @@
+[
+  {"id": "internal-01", "query": "Atlas 首期服务多少名员工", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-02", "query": "Atlas 日均查询量大约是多少", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-03", "query": "知识库初期文档规模有多少份", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-04", "query": "超过 30 页的长文档占比是多少", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "long_document", "expected_behavior": "answer"},
+  {"id": "internal-05", "query": "每天新增或变更的文档数量", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-06", "query": "语料里中文和英文的比例", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "internal_fact", "expected_behavior": "answer"},
+  {"id": "internal-07", "query": "普通问题首屏响应时间目标", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-08", "query": "复杂跨文档问题允许的生成时间", "relevant_source": "01_product_requirements.md", "relevant_chunk_ids": ["local-bcba105fe48f:p1:c0"], "query_type": "internal_fact", "expected_behavior": "answer"},
+  {"id": "internal-09", "query": "原始内部文档能否完整上传到第三方服务", "relevant_source": "02_architecture_constraints.md", "relevant_chunk_ids": ["local-f4c9fff07eb3:p1:c0"], "query_type": "internal_fact", "expected_behavior": "answer"},
+  {"id": "internal-10", "query": "什么内容允许发送给已签约的大模型 API", "relevant_source": "02_architecture_constraints.md", "relevant_chunk_ids": ["local-f4c9fff07eb3:p1:c0"], "query_type": "internal_fact", "expected_behavior": "answer"},
+  {"id": "internal-11", "query": "日志中禁止保存哪些信息", "relevant_source": "02_architecture_constraints.md", "relevant_chunk_ids": ["local-f4c9fff07eb3:p1:c0"], "query_type": "internal_fact", "expected_behavior": "answer"},
+  {"id": "internal-12", "query": "现有服务器的 CPU 内存和 GPU 配置", "relevant_source": "02_architecture_constraints.md", "relevant_chunk_ids": ["local-f4c9fff07eb3:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-13", "query": "团队是否具备大规模图数据库生产经验", "relevant_source": "02_architecture_constraints.md", "relevant_chunk_ids": ["local-f4c9fff07eb3:p1:c0"], "query_type": "internal_fact", "expected_behavior": "answer"},
+  {"id": "internal-14", "query": "首期交付的团队人数和周期", "relevant_source": "02_architecture_constraints.md", "relevant_chunk_ids": ["local-f4c9fff07eb3:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-15", "query": "当前基线的分块大小和重叠字符数", "relevant_source": "03_operations_baseline.md", "relevant_chunk_ids": ["local-092d1a94ec09:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-16", "query": "当前基线使用什么检索方式", "relevant_source": "03_operations_baseline.md", "relevant_chunk_ids": ["local-092d1a94ec09:p1:c0"], "query_type": "internal_fact", "expected_behavior": "answer"},
+  {"id": "internal-17", "query": "内部 60 道问题人工标注的 Recall@5 基线是多少", "relevant_source": "03_operations_baseline.md", "relevant_chunk_ids": ["local-092d1a94ec09:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-18", "query": "基线引用存在率和引用能支持结论的比例分别是多少", "relevant_source": "03_operations_baseline.md", "relevant_chunk_ids": ["local-092d1a94ec09:p1:c0"], "query_type": "conflict", "expected_behavior": "answer"},
+  {"id": "internal-19", "query": "全量重建索引需要多长时间", "relevant_source": "03_operations_baseline.md", "relevant_chunk_ids": ["local-092d1a94ec09:p1:c0"], "query_type": "numeric", "expected_behavior": "answer"},
+  {"id": "internal-20", "query": "为什么长文档的概括性问题容易只命中局部段落", "relevant_source": "03_operations_baseline.md", "relevant_chunk_ids": ["local-092d1a94ec09:p1:c0"], "query_type": "long_document", "expected_behavior": "answer"},
+
+  {"id": "raptor-01", "query": "RAPTOR 的英文全称和核心思想是什么", "relevant_source": "2401.18059v1.pdf", "relevant_chunk_ids": ["local-01319e2e6e6e:p1:c0", "local-01319e2e6e6e:p1:c1"], "query_type": "abbreviation", "expected_behavior": "answer"},
+  {"id": "raptor-02", "query": "RAPTOR 如何自底向上构建不同摘要层级的树", "relevant_source": "2401.18059v1.pdf", "relevant_chunk_ids": ["local-01319e2e6e6e:p1:c1"], "query_type": "paper_fact", "expected_behavior": "answer"},
+  {"id": "raptor-03", "query": "RAPTOR 的 tree traversal 和 collapsed tree 检索方式有什么区别", "relevant_source": "2401.18059v1.pdf", "relevant_chunk_ids": ["local-01319e2e6e6e:p3:c5"], "query_type": "paper_fact", "expected_behavior": "answer"},
+
+  {"id": "crag-01", "query": "CRAG 全称是什么，检索评估器有哪三种动作", "relevant_source": "2401.15884v1.pdf", "relevant_chunk_ids": ["local-efc0de696312:p3:c5", "local-efc0de696312:p1:c0"], "query_type": "abbreviation", "expected_behavior": "answer"},
+  {"id": "crag-02", "query": "CRAG 如何评估检索文档的相关性和可靠程度", "relevant_source": "2401.15884v1.pdf", "relevant_chunk_ids": ["local-efc0de696312:p2:c2"], "query_type": "paper_fact", "expected_behavior": "answer"},
+  {"id": "crag-03", "query": "CRAG 的 decompose-then-recompose 算法如何去除冗余上下文", "relevant_source": "2401.15884v1.pdf", "relevant_chunk_ids": ["local-efc0de696312:p2:c3"], "query_type": "paper_fact", "expected_behavior": "answer"},
+
+  {"id": "flare-01", "query": "FLARE 的英文全称和前瞻性主动检索是什么", "relevant_source": "2305.06983v2.pdf", "relevant_chunk_ids": ["local-2425bd04de6e:p1:c0", "local-2425bd04de6e:p2:c1"], "query_type": "abbreviation", "expected_behavior": "answer"},
+  {"id": "flare-02", "query": "FLARE 根据什么置信度信号决定触发检索", "relevant_source": "2305.06983v2.pdf", "relevant_chunk_ids": ["local-2425bd04de6e:p4:c4"], "query_type": "paper_fact", "expected_behavior": "answer"},
+  {"id": "flare-03", "query": "FLARE 如何在长文本生成中迭代检索", "relevant_source": "2305.06983v2.pdf", "relevant_chunk_ids": ["local-2425bd04de6e:p2:c1"], "query_type": "paper_fact", "expected_behavior": "answer"},
+
+  {"id": "graphrag-01", "query": "GraphRAG 为什么说普通 RAG 回答不了面向整个语料库的全局问题", "relevant_source": "2404.16130v2.pdf", "relevant_chunk_ids": ["local-730f1a9f38d1:p1:c1"], "query_type": "paper_fact", "expected_behavior": "answer"},
+  {"id": "graphrag-02", "query": "GraphRAG 如何用社区摘要组合出全局答案", "relevant_source": "2404.16130v2.pdf", "relevant_chunk_ids": ["local-730f1a9f38d1:p1:c2"], "query_type": "paper_fact", "expected_behavior": "answer"},
+  {"id": "graphrag-03", "query": "GraphRAG 索引流水线如何抽取实体关系并用 Leiden 构建社区", "relevant_source": "2404.16130v2.pdf", "relevant_chunk_ids": ["local-730f1a9f38d1:p4:c0"], "query_type": "paper_fact", "expected_behavior": "answer"},
+
+  {"id": "cross-01", "query": "团队没有图数据库经验且要 4 人 8 周交付，GraphRAG 的全局问题能力是否值得引入", "relevant_source": "2404.16130v2.pdf", "relevant_sources": ["2404.16130v2.pdf", "02_architecture_constraints.md"], "relevant_chunk_ids": ["local-730f1a9f38d1:p1:c1", "local-f4c9fff07eb3:p1:c0"], "query_type": "cross_document", "expected_behavior": "answer"},
+  {"id": "cross-02", "query": "哪种方案会显式判断检索是否出错并纠错，适合每日更新的知识库", "relevant_source": "2401.15884v1.pdf", "relevant_sources": ["2401.15884v1.pdf", "03_operations_baseline.md"], "relevant_chunk_ids": ["local-efc0de696312:p2:c2", "local-092d1a94ec09:p1:c0"], "query_type": "cross_document", "expected_behavior": "answer"},
+  {"id": "conflict-01", "query": "GraphRAG 论文宣称能回答全局问题，为什么在 Atlas 当前约束下仍可能不推荐它", "relevant_source": "02_architecture_constraints.md", "relevant_sources": ["02_architecture_constraints.md", "2404.16130v2.pdf"], "relevant_chunk_ids": ["local-f4c9fff07eb3:p1:c0", "local-730f1a9f38d1:p1:c1"], "query_type": "conflict", "expected_behavior": "answer"},
+
+  {"id": "noanswer-01", "query": "Atlas 明年的市场推广预算是多少", "relevant_source": "", "relevant_chunk_ids": [], "query_type": "no_answer", "expected_behavior": "refuse"},
+  {"id": "noanswer-02", "query": "Atlas 是否通过了 SOC2 安全合规认证", "relevant_source": "", "relevant_chunk_ids": [], "query_type": "no_answer", "expected_behavior": "refuse"},
+  {"id": "noanswer-03", "query": "Qdrant 企业版每年的商业授权费用是多少", "relevant_source": "", "relevant_chunk_ids": [], "query_type": "no_answer", "expected_behavior": "refuse"},
+  {"id": "noanswer-04", "query": "RAPTOR 在中文法律合同数据集上的准确率是多少", "relevant_source": "", "relevant_chunk_ids": [], "query_type": "no_answer", "expected_behavior": "refuse"},
+  {"id": "noanswer-05", "query": "公司 CEO 叫什么名字", "relevant_source": "", "relevant_chunk_ids": [], "query_type": "no_answer", "expected_behavior": "refuse"}
+]
