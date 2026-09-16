@@ -3,6 +3,7 @@ from config import (
     DEEPSEEK_API_KEY,
     DEEPSEEK_BASE_URL,
     DEEPSEEK_MODEL,
+    DEEPSEEK_TIMEOUT_SECONDS,
     LLM_MODEL,
     LLM_PROVIDER,
     LLM_TEMPERATURE,
@@ -25,6 +26,7 @@ def get_chat_model():
             base_url=DEEPSEEK_BASE_URL,
             api_key=DEEPSEEK_API_KEY,
             temperature=LLM_TEMPERATURE,
+            timeout=DEEPSEEK_TIMEOUT_SECONDS,
         )
 
     if LLM_PROVIDER == "ollama":

@@ -49,6 +49,7 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "deepseek").strip().lower()
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
 DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
+DEEPSEEK_TIMEOUT_SECONDS = int(os.getenv("DEEPSEEK_TIMEOUT_SECONDS", "90"))
 
 # Ollama 是离线备用方案。
 LLM_MODEL = os.getenv("LLM_MODEL", "qwen2.5:7b")

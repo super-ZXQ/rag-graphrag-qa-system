@@ -99,7 +99,7 @@ streamlit run ui/app.py --server.port 8501
 ### 3. 启动（Docker）
 
 ```powershell
-docker compose up --build
+docker compose --env-file .env.local up --build
 ```
 
 - UI: <http://localhost:8501>
@@ -109,7 +109,9 @@ docker compose up --build
 
 约束与设计：
 
+- `--env-file .env.local` 同时将本地配置传给 API、Neo4j 与 Compose 变量插值，避免自定义 Neo4j 密码时服务间认证不一致。
 - `.env.local` **不会**打进镜像（见 `.dockerignore`）；密钥只经 `env_file`/环境变量注入。
+- Compose 默认只绑定 `127.0.0.1`，不会把 UI、API、Qdrant、Neo4j 暴露到局域网；远程部署应放在具备 TLS、认证与 RBAC 的反向代理之后。
 - API 容器内强制 `QDRANT_PATH=""`，使用独立 Qdrant 服务；`./data` 挂载 volume。
 - Ollama 在宿主机：`OLLAMA_BASE_URL` 默认 `http://host.docker.internal:11434`。
 - Engine 未启动时 `docker compose up` 会失败；先启动 Docker Desktop，或退回上面的本地模式。
@@ -237,6 +239,7 @@ tests/            单元和 API 测试
 ## 安全提醒
 
 - `.env.local` 已被 Git 忽略，且不会打进 Docker 镜像。
+- 当前作品集部署没有用户认证；默认仅限本机访问，不能把 `HOST_BIND=0.0.0.0` 当作生产上线方案。
 - 若 DeepSeek Key 曾出现在聊天、截图或日志中，**请立即在控制台撤销并轮换**；新 Key 只放 `.env.local` 或系统环境变量。
 - 日志与 UI 不展示内部文档全文；生成时仅发送命中必要片段。
 

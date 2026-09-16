@@ -6,25 +6,28 @@ services:
   qdrant:
     image: qdrant/qdrant:v1.19.1
     ports:
-      - "6333:6333"
-      - "6334:6334"
+      - "${HOST_BIND:-127.0.0.1}:6333:6333"
+      - "${HOST_BIND:-127.0.0.1}:6334:6334"
     volumes:
       - qdrant-data:/qdrant/storage
   neo4j:
     image: neo4j:5.26.30-community
     ports:
-      - "7474:7474"
-      - "7687:7687"
+      - "${HOST_BIND:-127.0.0.1}:7474:7474"
+      - "${HOST_BIND:-127.0.0.1}:7687:7687"
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-change-me-123}
     volumes:
       - neo4j-data:/data
 
   api:
-    build: .
+    build:
+      context: .
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
     command: uvicorn api.app:app --host 0.0.0.0 --port 8000
     ports:
-      - "8000:8000"
+      - "${HOST_BIND:-127.0.0.1}:8000:8000"
     env_file:
       - path: .env.local
         required: false
@@ -51,10 +54,13 @@ services:
       start_period: 20s
 
   ui:
-    build: .
+    build:
+      context: .
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
     command: streamlit run ui/app.py --server.address 0.0.0.0 --server.port 8501 --server.headless true
     ports:
-      - "8501:8501"
+      - "${HOST_BIND:-127.0.0.1}:8501:8501"
     environment:
       API_URL: http://api:8000
     depends_on:

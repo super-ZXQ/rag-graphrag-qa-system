@@ -1,8 +1,8 @@
 """
 GraphRAG 问答模块（步骤 7）— 基于 Neo4j 引用图
 流程：
-  用户问题 → 关键词/别名识别 → 选择预定义 Cypher 模板
-         → 命中则直接执行；不命中则调用 LLM 生成 Cypher
+  用户问题 → 关键词/别名识别 → 选择预定义、参数化 Cypher 模板
+         → 命中则只读执行；不命中则明确拒绝该图查询
          → 拿到结果 → LLM 整理成自然语言答案
          → 返回 (答案 + 原始 Cypher + 查询结果 + 论文标题)
 
@@ -201,7 +201,7 @@ def template_query(question: str) -> tuple[str, list[dict], str] | None:
         rows = _run_cypher(cypher, {"arxiv_id": ids[0]})
         return cypher, rows, "outgoing"
 
-    # 关键词模板均未命中 → 交给 LLM 生成 Cypher
+    # 关键词模板均未命中：禁止模型生成 Cypher，交由调用方返回受限能力提示。
     return None
 
 

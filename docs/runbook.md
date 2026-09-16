@@ -36,11 +36,13 @@ Invoke-RestMethod http://127.0.0.1:8000/health/live
 ```powershell
 # 确认 Engine
 docker version
-docker compose config
+docker compose --env-file .env.local config
 
 # 启动
-docker compose up --build
+docker compose --env-file .env.local up --build
 ```
+
+若官方 PyPI 下载不稳定，可只在本机 `.env.local` 中把 `PIP_INDEX_URL` 改为可信镜像后重试；该值只用于构建镜像，不会进入运行时密钥或报告数据。
 
 预期端口：
 
@@ -65,6 +67,7 @@ docker compose up --build
 - Ollama 连不上：宿主机 `ollama serve`，必要时设 `OLLAMA_BASE_URL`。
 - 端口占用：改 compose 端口映射，UI 的 `API_URL` 同步改。
 - 误设 `QDRANT_PATH`：容器内必须为空，走 `QDRANT_URL=http://qdrant:6333`。
+- 自定义 Neo4j 密码后认证失败：始终用 `docker compose --env-file .env.local ...`，让 API 与 Neo4j 读取同一份变量。
 
 ## C. 常用故障恢复
 
